@@ -1,0 +1,259 @@
+{
+	"info": {
+		"_postman_id": "e2d23281-585d-4c20-9d65-559612374a2c",
+		"name": "POC-REST-SERVER-MAVEN",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CREATE",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"creation_rq_content = pm.variables.replaceIn('{{$randomCatchPhrase}}')\r",
+							"tests[\"creation_rq_content: \" + creation_rq_content] = true;\r",
+							"postman.setEnvironmentVariable(\"creation_rq_content\", creation_rq_content);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var creation_rq_content = postman.getEnvironmentVariable(\"creation_rq_content\")\r",
+							"var rs = JSON.parse(responseBody);\r",
+							"\r",
+							"var creation_rs_id = rs.id;\r",
+							"tests[\"creation_rs_id: \" + creation_rs_id] = true;\r",
+							"postman.setEnvironmentVariable(\"creation_rs_id\", creation_rs_id);\r",
+							"\r",
+							"var creation_rs_content = rs.pocModelContent.content;\r",
+							"tests[\"creation_rs_content: \" + creation_rs_content] = true;\r",
+							"pm.expect(creation_rs_content).to.eql(creation_rq_content);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": \"{{creation_rq_content}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{url}}/poc",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"poc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "READ",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var rs = JSON.parse(responseBody);\r",
+							"\r",
+							"var creation_rq_content = postman.getEnvironmentVariable(\"creation_rq_content\")\r",
+							"var creation_rs_id = postman.getEnvironmentVariable(\"creation_rs_id\")\r",
+							"\r",
+							"var read_rs_id = rs.id;\r",
+							"postman.setEnvironmentVariable(\"read_rs_id\", read_rs_id);\r",
+							"tests[\"read_rs_id: \" + read_rs_id] = true;\r",
+							"pm.expect(read_rs_id).to.eql(creation_rs_id);\r",
+							"\r",
+							"var read_rs_content = rs.pocModelContent.content;\r",
+							"postman.setEnvironmentVariable(\"read_rs_content\", read_rs_content);\r",
+							"tests[\"read_rs_content: \" + read_rs_content] = true;\r",
+							"pm.expect(read_rs_content).to.eql(creation_rq_content);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": \"{{$randomCatchPhrase}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{url}}/poc/{{creation_rs_id}}",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"poc",
+						"{{creation_rs_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"update_rq_content = pm.variables.replaceIn('{{$randomCatchPhrase}}')\r",
+							"tests[\"update_rq_content: \" + update_rq_content] = true;\r",
+							"postman.setEnvironmentVariable(\"update_rq_content\", update_rq_content);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var update_rq_content = postman.getEnvironmentVariable(\"update_rq_content\")\r",
+							"var rs = JSON.parse(responseBody);\r",
+							"\r",
+							"var update_rs_id = rs.id;\r",
+							"tests[\"update_rs_id: \" + update_rs_id] = true;\r",
+							"postman.setEnvironmentVariable(\"update_rs_id\", update_rs_id);\r",
+							"\r",
+							"var update_rs_content = rs.pocModelContent.content;\r",
+							"tests[\"update_rs_content: \" + update_rs_content] = true;\r",
+							"pm.expect(update_rs_content).to.eql(update_rq_content);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": \"{{update_rq_content}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{url}}/poc/{{creation_rs_id}}",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"poc",
+						"{{creation_rs_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var rs = JSON.parse(responseBody);\r",
+							"\r",
+							"var creation_rs_id = postman.getEnvironmentVariable(\"creation_rs_id\")\r",
+							"var update_rq_content = postman.getEnvironmentVariable(\"update_rq_content\")\r",
+							"\r",
+							"var delete_rs_id = rs.id;\r",
+							"postman.setEnvironmentVariable(\"delete_rs_id\", delete_rs_id);\r",
+							"tests[\"delete_rs_id: \" + delete_rs_id] = true;\r",
+							"pm.expect(delete_rs_id).to.eql(creation_rs_id);\r",
+							"\r",
+							"var delete_rs_content = rs.pocModelContent.content;\r",
+							"postman.setEnvironmentVariable(\"delete_rs_content\", delete_rs_content);\r",
+							"tests[\"delete_rs_content: \" + delete_rs_content] = true;\r",
+							"pm.expect(delete_rs_content).to.eql(update_rq_content);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": \"{{$randomCatchPhrase}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{url}}/poc/{{creation_rs_id}}",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"poc",
+						"{{creation_rs_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "localhost:8080"
+		}
+	]
+}
